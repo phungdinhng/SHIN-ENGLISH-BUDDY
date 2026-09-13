@@ -1,0 +1,646 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ollie the English Owl</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,600&display=swap">
+<style>
+  :root{
+    --bg:#e9f2fb;
+    --bg-2:#dcebfa;
+    --surface:#ffffff;
+    --surface-2:#f4f8fd;
+    --ink:#1f3a52;
+    --ink-soft:#557089;
+    --line:#d6e4f2;
+    --accent:#ff8a5b;
+    --accent-ink:#7a3316;
+    --sun:#ffcf4d;
+    --mint:#37b98f;
+    --mint-soft:#e2f6ef;
+    --sky:#5aa9f0;
+    --sky-soft:#e6f1fd;
+    --shadow:0 10px 30px rgba(31,58,82,.12);
+    --shadow-sm:0 4px 14px rgba(31,58,82,.10);
+    --radius:22px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0f1a26; --bg-2:#14222f; --surface:#182a3a; --surface-2:#12222f;
+      --ink:#e8f1fa; --ink-soft:#9db6cc; --line:#274054;
+      --accent:#ff9d73; --accent-ink:#3a1508; --sun:#ffd766;
+      --mint:#4fd3a6; --mint-soft:#123528; --sky:#6fb6f5; --sky-soft:#12293d;
+      --shadow:0 12px 34px rgba(0,0,0,.4); --shadow-sm:0 4px 16px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0f1a26; --bg-2:#14222f; --surface:#182a3a; --surface-2:#12222f;
+    --ink:#e8f1fa; --ink-soft:#9db6cc; --line:#274054;
+    --accent:#ff9d73; --accent-ink:#3a1508; --sun:#ffd766;
+    --mint:#4fd3a6; --mint-soft:#123528; --sky:#6fb6f5; --sky-soft:#12293d;
+    --shadow:0 12px 34px rgba(0,0,0,.4); --shadow-sm:0 4px 16px rgba(0,0,0,.35);
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:
+      radial-gradient(1200px 500px at 100% -10%, var(--bg-2), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, var(--bg-2), transparent 55%),
+      var(--bg);
+    color:var(--ink);
+    font-family:"Nunito", system-ui, -apple-system, "Segoe UI", sans-serif;
+    min-height:100vh;
+  }
+  img{max-width:100%}
+  [hidden]{display:none!important}
+  .app{
+    max-width:760px; margin:0 auto; min-height:100vh;
+    display:flex; flex-direction:column; padding-inline:16px;
+  }
+
+  header{ display:flex;align-items:center;gap:14px; padding-block:16px 12px; }
+  .brand{display:flex;align-items:center;gap:12px;min-width:0}
+  .owl{width:54px;height:54px;flex:none;filter:drop-shadow(0 6px 10px rgba(31,58,82,.18))}
+  .titles{min-width:0}
+  .titles h1{
+    font-family:"Baloo 2",cursive; font-weight:800;font-size:1.5rem;line-height:1;margin:0;
+    letter-spacing:.2px; color:var(--ink); text-wrap:balance;
+  }
+  .titles p{margin:2px 0 0;font-size:.82rem;color:var(--ink-soft);font-weight:600}
+  .stars{
+    display:flex;align-items:center;gap:6px;flex:none;
+    background:var(--surface);border:2px solid var(--line);
+    padding:7px 12px;border-radius:999px;box-shadow:var(--shadow-sm);
+    font-family:"Baloo 2",cursive;font-weight:700;color:var(--ink);
+    font-variant-numeric:tabular-nums;
+  }
+  .stars .s{font-size:1.05rem;line-height:1}
+  .hgroup{margin-left:auto;display:flex;align-items:center;gap:10px;flex:none}
+  .side-btn.small{width:42px;height:42px}
+  .side-btn.small svg{width:20px;height:20px}
+  .settings{
+    background:var(--surface);border:2px solid var(--line);border-radius:18px;
+    box-shadow:var(--shadow-sm);padding:15px 16px;margin:0 2px 10px;
+    display:flex;flex-direction:column;gap:15px;animation:pop .2s ease;
+  }
+  .setrow{display:flex;flex-direction:column;gap:8px}
+  .setrow label{font-weight:700;font-size:.9rem;color:var(--ink)}
+  .setrow label b{color:var(--sky);font-family:"Baloo 2",cursive;font-weight:700}
+  .setrow select{
+    border:2px solid var(--line);background:var(--surface-2);color:var(--ink);
+    border-radius:12px;padding:10px 12px;font-family:"Nunito";font-weight:700;font-size:.92rem;max-width:100%;
+  }
+  .setrow input[type=range]{width:100%;accent-color:var(--accent);height:26px}
+  #tryVoice{align-self:flex-start}
+
+  .topics{ display:flex;gap:8px;overflow-x:auto;padding:4px 2px 12px; scrollbar-width:thin; }
+  .topics::-webkit-scrollbar{height:6px}
+  .topics::-webkit-scrollbar-thumb{background:var(--line);border-radius:999px}
+  .chip{
+    flex:none;border:2px solid var(--line);background:var(--surface);
+    color:var(--ink);font-family:"Nunito";font-weight:700;font-size:.9rem;
+    padding:8px 14px;border-radius:999px;cursor:pointer;
+    display:flex;align-items:center;gap:7px;transition:transform .12s, border-color .12s, background .12s;
+    box-shadow:var(--shadow-sm);white-space:nowrap;
+  }
+  .chip:hover{transform:translateY(-2px);border-color:var(--sky)}
+  .chip .e{font-size:1.05rem}
+  .chip:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+
+  .chat{ flex:1;display:flex;flex-direction:column;gap:14px; padding:10px 2px 18px;overflow-y:auto; }
+  .row{display:flex;gap:10px;align-items:flex-end;max-width:100%}
+  .row.kid{flex-direction:row-reverse}
+  .av{ width:38px;height:38px;flex:none;border-radius:50%; display:grid;place-items:center;background:var(--sky-soft); box-shadow:var(--shadow-sm); }
+  .av svg{width:30px;height:30px}
+  .bubble{ max-width:78%;padding:13px 16px;border-radius:20px; font-size:1.05rem;line-height:1.5;box-shadow:var(--shadow-sm); animation:pop .22s ease; }
+  @keyframes pop{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
+  .ollie .bubble{ background:var(--surface);border:2px solid var(--line); border-bottom-left-radius:7px;color:var(--ink); }
+  .kid .bubble{ background:var(--accent);color:#fff;border-bottom-right-radius:7px; font-weight:700; }
+  :root[data-theme="dark"] .kid .bubble{color:#241009}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .kid .bubble{color:#241009}}
+  .en{font-weight:700}
+  .vi{ margin-top:8px;padding-top:8px;border-top:1px dashed var(--line); font-size:.95rem;color:var(--ink-soft);font-style:italic;font-weight:600; }
+  .tip{ margin-top:9px;background:var(--mint-soft);border-radius:13px; padding:9px 12px;font-size:.92rem;color:var(--ink);font-weight:600; display:flex;gap:8px;align-items:flex-start; }
+  .tip .e{flex:none}
+  .tip .tvi{display:block;color:var(--ink-soft);font-style:italic;margin-top:2px;font-weight:600}
+  .brow{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+  .mini{
+    border:1.5px solid var(--line);background:var(--surface-2);color:var(--ink-soft);
+    font-family:"Nunito";font-weight:700;font-size:.8rem;cursor:pointer;
+    padding:5px 10px;border-radius:999px;display:flex;align-items:center;gap:5px;
+    transition:color .12s,border-color .12s;
+  }
+  .mini:hover{color:var(--sky);border-color:var(--sky)}
+  .mini svg{width:14px;height:14px}
+  .mini:focus-visible{outline:2px solid var(--sky);outline-offset:2px}
+
+  .thinking{display:flex;gap:5px;padding:4px 2px}
+  .thinking span{ width:9px;height:9px;border-radius:50%;background:var(--sky); animation:bob 1s infinite ease-in-out; }
+  .thinking span:nth-child(2){animation-delay:.15s}
+  .thinking span:nth-child(3){animation-delay:.3s}
+  @keyframes bob{0%,80%,100%{transform:translateY(0);opacity:.4}40%{transform:translateY(-7px);opacity:1}}
+
+  .dock{ position:sticky;bottom:0;padding:12px 0 18px; background:linear-gradient(to top, var(--bg) 55%, transparent); }
+  .status{ text-align:center;min-height:22px;font-weight:700;color:var(--ink-soft); font-size:.9rem;margin-bottom:8px; }
+  .status.live{color:var(--accent)}
+  .micwrap{display:flex;align-items:center;justify-content:center;gap:16px}
+  .side-btn{
+    width:46px;height:46px;border-radius:50%;border:2px solid var(--line);
+    background:var(--surface);color:var(--ink-soft);cursor:pointer;
+    display:grid;place-items:center;box-shadow:var(--shadow-sm);
+    transition:transform .12s,color .12s,border-color .12s;flex:none;
+  }
+  .side-btn:hover{transform:translateY(-2px);color:var(--sky);border-color:var(--sky)}
+  .side-btn.on{color:var(--accent);border-color:var(--accent)}
+  .side-btn svg{width:22px;height:22px}
+  .side-btn:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+  .mic{
+    width:84px;height:84px;border-radius:50%;border:none;cursor:pointer;
+    background:radial-gradient(circle at 35% 30%, #ffb08c, var(--accent));
+    color:#fff;display:grid;place-items:center;flex:none;
+    box-shadow:0 12px 26px rgba(255,138,91,.45); transition:transform .12s;
+  }
+  .mic:hover{transform:scale(1.05)}
+  .mic:active{transform:scale(.96)}
+  .mic svg{width:38px;height:38px}
+  .mic:focus-visible{outline:4px solid var(--sun);outline-offset:3px}
+  .mic.listening{animation:ring 1.3s infinite}
+  @keyframes ring{
+    0%{box-shadow:0 0 0 0 rgba(255,138,91,.55),0 12px 26px rgba(255,138,91,.45)}
+    70%{box-shadow:0 0 0 22px rgba(255,138,91,0),0 12px 26px rgba(255,138,91,.45)}
+    100%{box-shadow:0 0 0 0 rgba(255,138,91,0),0 12px 26px rgba(255,138,91,.45)}
+  }
+  .mic[disabled]{opacity:.5;cursor:not-allowed}
+
+  .typebox{display:none;gap:8px;margin-top:12px}
+  .typebox.show{display:flex}
+  .typebox input{
+    flex:1;min-width:0;border:2px solid var(--line);background:var(--surface);
+    border-radius:999px;padding:12px 18px;font-family:"Nunito";font-size:1rem;
+    color:var(--ink);font-weight:600;
+  }
+  .typebox input:focus{outline:none;border-color:var(--sky)}
+  .typebox button{
+    border:none;background:var(--accent);color:#fff;font-family:"Baloo 2",cursive;
+    font-weight:700;padding:0 20px;border-radius:999px;cursor:pointer;font-size:1rem;
+  }
+  .hint{text-align:center;font-size:.8rem;color:var(--ink-soft);margin-top:10px;font-weight:600}
+  .banner{
+    background:var(--sun);color:#5a4300;border-radius:14px;padding:11px 14px;
+    font-weight:700;font-size:.9rem;margin:0 2px 8px;text-align:center;
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  @media (max-width:460px){
+    .titles h1{font-size:1.25rem}
+    .bubble{font-size:1rem;max-width:82%}
+    .mic{width:76px;height:76px}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">
+      <svg class="owl" viewBox="0 0 100 100" aria-hidden="true">
+        <ellipse cx="50" cy="58" rx="34" ry="35" fill="#8e6bcf"/>
+        <ellipse cx="50" cy="63" rx="24" ry="26" fill="#f3ecff"/>
+        <path d="M20 34 Q26 14 40 26 Z" fill="#8e6bcf"/>
+        <path d="M80 34 Q74 14 60 26 Z" fill="#8e6bcf"/>
+        <circle cx="38" cy="46" r="14" fill="#fff"/>
+        <circle cx="62" cy="46" r="14" fill="#fff"/>
+        <circle cx="40" cy="47" r="6.5" fill="#20304a"/>
+        <circle cx="60" cy="47" r="6.5" fill="#20304a"/>
+        <circle cx="42" cy="45" r="2" fill="#fff"/>
+        <circle cx="62" cy="45" r="2" fill="#fff"/>
+        <path d="M46 56 L54 56 L50 64 Z" fill="#ffb703"/>
+        <path d="M28 84 q10 8 20 2" fill="none" stroke="#6a4aa8" stroke-width="5" stroke-linecap="round"/>
+        <path d="M72 84 q-10 8 -20 2" fill="none" stroke="#6a4aa8" stroke-width="5" stroke-linecap="round"/>
+      </svg>
+      <div class="titles">
+        <h1>Ollie the English Owl</h1>
+        <p>Nói chuyện tiếng Anh mỗi ngày 🦉</p>
+      </div>
+    </div>
+    <div class="hgroup">
+      <div class="stars" title="Số lần con luyện nói">
+        <span class="s">⭐</span><span id="starCount">0</span>
+      </div>
+      <button class="side-btn small" id="gearBtn" title="Cài đặt giọng đọc" aria-label="Cài đặt giọng đọc">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <section class="settings" id="settings" hidden aria-label="Cài đặt giọng đọc">
+    <div class="setrow">
+      <label for="voiceSel">🎙️ Giọng đọc (✨ = giọng tự nhiên hơn)</label>
+      <select id="voiceSel"></select>
+    </div>
+    <div class="setrow">
+      <label for="rateRange">🐢 Tốc độ đọc <b id="rateVal"></b></label>
+      <input type="range" id="rateRange" min="0.6" max="1.15" step="0.05">
+    </div>
+    <div class="setrow">
+      <label for="pitchRange">🤪 Độ cao giọng (cao = ngộ nghĩnh hơn) <b id="pitchVal"></b></label>
+      <input type="range" id="pitchRange" min="0.8" max="1.7" step="0.05">
+    </div>
+    <button class="mini" id="tryVoice" type="button">🔊 Nghe thử giọng này</button>
+  </section>
+
+  <div class="topics" id="topics" aria-label="Chọn chủ đề">
+    <button class="chip" data-topic="Greetings and introducing yourself (name, age, where you live)"><span class="e">👋</span>Chào hỏi</button>
+    <button class="chip" data-topic="My family and the people at home"><span class="e">👨‍👩‍👧</span>Gia đình</button>
+    <button class="chip" data-topic="My school, my class, and school subjects"><span class="e">🏫</span>Trường lớp</button>
+    <button class="chip" data-topic="Hobbies and free-time activities"><span class="e">⚽</span>Sở thích</button>
+    <button class="chip" data-topic="Food and drinks I like"><span class="e">🍜</span>Đồ ăn</button>
+    <button class="chip" data-topic="My town or city and places around"><span class="e">🏙️</span>Nơi ở</button>
+    <button class="chip" data-topic="Animals and pets"><span class="e">🐶</span>Con vật</button>
+    <button class="chip" data-topic="Daily routine (a normal day)"><span class="e">⏰</span>Một ngày</button>
+  </div>
+
+  <div class="banner" id="banner" hidden></div>
+
+  <main class="chat" id="chat" aria-live="polite"></main>
+
+  <div class="dock">
+    <div class="status" id="status">Bấm nút micro 🎤, nói tiếng Anh, rồi bấm lần nữa để gửi cho Ollie.</div>
+    <div class="micwrap">
+      <button class="side-btn on" id="soundBtn" title="Bật/tắt giọng đọc" aria-label="Bật hoặc tắt giọng đọc của Ollie">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>
+      </button>
+      <button class="mic" id="micBtn" title="Chạm để nói" aria-label="Chạm để nói">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><path d="M12 17v4"/><path d="M8 21h8"/></svg>
+      </button>
+      <button class="side-btn" id="keyBtn" title="Gõ chữ thay vì nói" aria-label="Gõ chữ thay vì nói">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M8 14h8"/></svg>
+      </button>
+    </div>
+    <form class="typebox" id="typebox" autocomplete="off">
+      <input id="typeInput" placeholder="Type in English..." aria-label="Gõ câu tiếng Anh" maxlength="200">
+      <button type="submit">Send</button>
+    </form>
+    <div class="hint">Ollie chỉ nói tiếng Anh đơn giản, đúng trình độ lớp 6.</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var chat = document.getElementById("chat");
+  var statusEl = document.getElementById("status");
+  var micBtn = document.getElementById("micBtn");
+  var soundBtn = document.getElementById("soundBtn");
+  var keyBtn = document.getElementById("keyBtn");
+  var typebox = document.getElementById("typebox");
+  var typeInput = document.getElementById("typeInput");
+  var banner = document.getElementById("banner");
+  var starCountEl = document.getElementById("starCount");
+
+  var turns = [];        // lịch sử hội thoại (user/assistant)
+  var busy = false;
+  var soundOn = true;
+  var stars = 0;
+
+  function showBanner(msg){ banner.textContent = msg; banner.hidden = false; }
+  function hideBanner(){ banner.hidden = true; }
+
+  // ---- sao thưởng (lưu trên máy, cố gắng hết sức) ----
+  try{ var s0 = localStorage.getItem("ollie_stars"); if(s0) stars = parseInt(s0,10)||0; }catch(e){}
+  starCountEl.textContent = stars;
+  function addStar(){
+    stars++; starCountEl.textContent = stars;
+    try{ localStorage.setItem("ollie_stars", String(stars)); }catch(e){}
+    starCountEl.parentNode.animate(
+      [{transform:"scale(1)"},{transform:"scale(1.25)"},{transform:"scale(1)"}],
+      {duration:360,easing:"ease-out"});
+  }
+
+  // ---- avatars ----
+  var owlAv = '<span class="av" aria-hidden="true"><svg viewBox="0 0 100 100"><ellipse cx="50" cy="58" rx="34" ry="35" fill="#8e6bcf"/><ellipse cx="50" cy="63" rx="24" ry="26" fill="#f3ecff"/><path d="M20 34 Q26 14 40 26 Z" fill="#8e6bcf"/><path d="M80 34 Q74 14 60 26 Z" fill="#8e6bcf"/><circle cx="38" cy="46" r="13" fill="#fff"/><circle cx="62" cy="46" r="13" fill="#fff"/><circle cx="40" cy="47" r="6" fill="#20304a"/><circle cx="60" cy="47" r="6" fill="#20304a"/><path d="M46 56 L54 56 L50 63 Z" fill="#ffb703"/></svg></span>';
+  var kidAv = '<span class="av" style="background:var(--accent)" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span>';
+  var spkIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg>';
+  var flagIcon = '🇻🇳';
+
+  function scrollDown(){ chat.scrollTop = chat.scrollHeight; }
+
+  function addKid(text){
+    var row = document.createElement("div");
+    row.className = "row kid";
+    row.innerHTML = kidAv + '<div class="bubble">'+escapeHtml(text)+'</div>';
+    chat.appendChild(row); scrollDown();
+  }
+
+  function addOllie(data){
+    var row = document.createElement("div");
+    row.className = "row ollie";
+    var reply = (data && data.reply) ? String(data.reply) : "Let's try again!";
+    var vi = (data && data.reply_vi) ? String(data.reply_vi) : "";
+    var fb = (data && data.feedback) ? String(data.feedback).trim() : "";
+    var fbvi = (data && data.feedback_vi) ? String(data.feedback_vi).trim() : "";
+
+    var html = owlAv + '<div class="bubble"><div class="en">'+escapeHtml(reply)+'</div>';
+    if(vi){ html += '<div class="vi" hidden>'+escapeHtml(vi)+'</div>'; }
+    if(fb){
+      html += '<div class="tip"><span class="e">💡</span><span>'+escapeHtml(fb)+
+              (fbvi? '<span class="tvi">'+escapeHtml(fbvi)+'</span>':'')+'</span></div>';
+    }
+    html += '<div class="brow">'+
+            '<button class="mini play">'+spkIcon+'Nghe lại</button>'+
+            (vi? '<button class="mini vibtn">'+flagIcon+' Tiếng Việt</button>':'')+
+            '</div></div>';
+    row.innerHTML = html;
+    chat.appendChild(row); scrollDown();
+
+    var playBtn = row.querySelector(".play");
+    if(playBtn) playBtn.addEventListener("click", function(){ speak(reply); });
+    var viBtn = row.querySelector(".vibtn");
+    if(viBtn){
+      var viEl = row.querySelector(".vi");
+      viBtn.addEventListener("click", function(){
+        viEl.hidden = !viEl.hidden;
+        viBtn.innerHTML = viEl.hidden ? (flagIcon+" Tiếng Việt") : (flagIcon+" Ẩn");
+      });
+    }
+    if(soundOn) speak(reply);
+  }
+
+  function addThinking(){
+    var row = document.createElement("div");
+    row.className = "row ollie"; row.id = "thinkingRow";
+    row.innerHTML = owlAv + '<div class="bubble"><div class="thinking"><span></span><span></span><span></span></div></div>';
+    chat.appendChild(row); scrollDown();
+  }
+  function removeThinking(){ var t=document.getElementById("thinkingRow"); if(t) t.remove(); }
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g,function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+    });
+  }
+
+  // ---- giọng đọc (Text-to-Speech) ----
+  var enVoices = [];
+  var voice = null;
+  var rate = 0.95, pitch = 1.12;
+  var savedVoiceName = null;
+  try{ var rr=parseFloat(localStorage.getItem("ollie_rate")); if(rr) rate=rr; }catch(e){}
+  try{ var pp=parseFloat(localStorage.getItem("ollie_pitch")); if(pp) pitch=pp; }catch(e){}
+  try{ savedVoiceName = localStorage.getItem("ollie_voice"); }catch(e){}
+
+  var voiceSel  = document.getElementById("voiceSel");
+  var rateRange = document.getElementById("rateRange");
+  var pitchRange= document.getElementById("pitchRange");
+  var rateVal   = document.getElementById("rateVal");
+  var pitchVal  = document.getElementById("pitchVal");
+
+  function scoreVoice(v){
+    var n=(v.name||"").toLowerCase(), s=0;
+    if(!v.localService) s+=5;
+    if(/natural|neural|enhanced|premium/.test(n)) s+=6;
+    if(/google/.test(n)) s+=4;
+    if(/samantha|ava|aria|jenny|sonia|libby|zira|emma|amber|michelle|nova/.test(n)) s+=2;
+    if(/en-us/i.test(v.lang)) s+=2;
+    if(/en-gb|en-au/i.test(v.lang)) s+=1;
+    return s;
+  }
+  function loadVoices(){
+    if(!("speechSynthesis" in window)) return;
+    var vs=[]; try{ vs=window.speechSynthesis.getVoices(); }catch(e){}
+    enVoices = vs.filter(function(v){ return /^en(-|_|$)/i.test(v.lang); });
+    if(!enVoices.length) return;
+    enVoices.sort(function(a,b){ return scoreVoice(b)-scoreVoice(a); });
+    voice = (savedVoiceName && enVoices.find(function(v){return v.name===savedVoiceName;})) || enVoices[0];
+    if(voiceSel){
+      voiceSel.innerHTML="";
+      enVoices.forEach(function(v){
+        var o=document.createElement("option");
+        o.value=v.name;
+        var label=v.name.replace(/Microsoft |Google /,"");
+        o.textContent=label+" ("+v.lang+")"+(v.localService?"":" ✨");
+        if(voice && v.name===voice.name) o.selected=true;
+        voiceSel.appendChild(o);
+      });
+    }
+  }
+  if("speechSynthesis" in window){
+    loadVoices();
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+  }
+  function speak(text){
+    if(!("speechSynthesis" in window)) return;
+    try{
+      window.speechSynthesis.cancel();
+      var u=new SpeechSynthesisUtterance(text);
+      if(voice){ u.voice=voice; u.lang=voice.lang; } else { u.lang="en-US"; }
+      u.rate=rate; u.pitch=pitch;
+      window.speechSynthesis.speak(u);
+    }catch(e){}
+  }
+
+  // ---- bảng cài đặt ----
+  if(rateRange){
+    rateRange.value=rate; pitchRange.value=pitch;
+    rateVal.textContent=rate.toFixed(2)+"×";
+    pitchVal.textContent=Math.round(pitch*100)+"%";
+    rateRange.addEventListener("input",function(){
+      rate=parseFloat(rateRange.value); rateVal.textContent=rate.toFixed(2)+"×";
+      try{localStorage.setItem("ollie_rate",String(rate));}catch(e){}
+    });
+    pitchRange.addEventListener("input",function(){
+      pitch=parseFloat(pitchRange.value); pitchVal.textContent=Math.round(pitch*100)+"%";
+      try{localStorage.setItem("ollie_pitch",String(pitch));}catch(e){}
+    });
+    voiceSel.addEventListener("change",function(){
+      var found=enVoices.find(function(v){return v.name===voiceSel.value;});
+      if(found){ voice=found; savedVoiceName=found.name; try{localStorage.setItem("ollie_voice",found.name);}catch(e){} speak("Hi! This is my new voice."); }
+    });
+    document.getElementById("tryVoice").addEventListener("click",function(){
+      speak("Hello! I am Ollie the owl. Let's have fun learning English together!");
+    });
+    document.getElementById("gearBtn").addEventListener("click",function(){
+      var sp=document.getElementById("settings");
+      sp.hidden=!sp.hidden;
+      document.getElementById("gearBtn").classList.toggle("on",!sp.hidden);
+      if(!sp.hidden) sp.scrollIntoView({behavior:"smooth",block:"nearest"});
+    });
+  }
+
+  // ---- gửi câu cho Ollie (gọi /api/chat trên Vercel) ----
+  async function send(userText, opts){
+    opts = opts || {};
+    if(busy) return;
+    busy = true; micBtn.disabled = true;
+    hideBanner();
+    if(!opts.isTopic) addKid(userText);
+    addThinking();
+    setStatus("Ollie đang nghĩ...", false);
+
+    turns.push({role:"user", content: userText});
+    if(turns.length > 16) turns = turns.slice(turns.length - 16);
+
+    try{
+      var resp = await fetch("/api/chat", {
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ history: turns })
+      });
+      var data = await resp.json().catch(function(){ return {}; });
+      removeThinking();
+      if(!resp.ok){ throw new Error((data && data.error) || ("HTTP "+resp.status)); }
+      addOllie(data);
+      turns.push({role:"assistant", content: (data && data.reply) ? String(data.reply) : "Let's try again!"});
+      if(!opts.isTopic) addStar();
+      setStatus("Tới lượt con nói tiếp!", false);
+    }catch(e){
+      removeThinking();
+      if(turns.length && turns[turns.length-1].role==="user") turns.pop();
+      setStatus("Ối, Ollie chưa trả lời được. Thử lại nhé!", false);
+      showBanner("Không kết nối được với Ollie. Kiểm tra: đã thêm khoá AI_GATEWAY_API_KEY trên Vercel chưa, và máy có mạng không? (" + escapeHtml(String(e.message||e)) + ")");
+    }finally{
+      busy = false; micBtn.disabled = false;
+    }
+  }
+
+  function setStatus(t, live){
+    statusEl.textContent = t;
+    statusEl.classList.toggle("live", !!live);
+  }
+
+  // ---- chủ đề ----
+  document.getElementById("topics").addEventListener("click", function(ev){
+    var b = ev.target.closest(".chip"); if(!b) return;
+    var topic = b.getAttribute("data-topic");
+    send("Let's talk about: "+topic+". Please greet me and ask me one easy question about it.", {isTopic:true});
+  });
+
+  // ---- nhận diện giọng nói: bấm 1 lần để nói, bấm lần nữa để gửi ----
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  var recog = null, listening = false, finalText = "", interimText = "", hadError = false, micReady = false;
+  if(SR){
+    recog = new SR();
+    recog.lang = "en-US";
+    recog.interimResults = true;
+    recog.maxAlternatives = 1;
+    recog.continuous = true;
+
+    recog.onstart = function(){
+      listening=true; hadError=false; finalText=""; interimText="";
+      micBtn.classList.add("listening");
+      setStatus("Đang nghe... 🎤 Nói xong bấm nút một lần nữa!", true);
+    };
+    recog.onresult = function(ev){
+      interimText="";
+      for(var i=ev.resultIndex;i<ev.results.length;i++){
+        var t=ev.results[i][0].transcript;
+        if(ev.results[i].isFinal) finalText += t+" "; else interimText += t;
+      }
+      var show=(finalText+interimText).trim();
+      if(show) setStatus("“"+show+"”", true);
+    };
+    recog.onerror = function(ev){
+      hadError=true; listening=false; micBtn.classList.remove("listening");
+      if(ev.error==="not-allowed" || ev.error==="service-not-allowed"){
+        micReady=false;
+        setStatus("Micro chưa được cho phép.", false);
+        showBanner("🎤 Micro đang bị chặn. Bấm biểu tượng ổ khóa 🔒 hoặc hình micro ở thanh địa chỉ, chọn \"Cho phép (Allow)\", rồi bấm nút nói lại. Hoặc dùng nút bàn phím ⌨️ để gõ.");
+        toggleType(true);
+      }else if(ev.error==="no-speech"){
+        setStatus("Ollie chưa nghe thấy gì. Bấm nút và nói lại nhé!", false);
+      }else if(ev.error==="audio-capture"){
+        setStatus("Không tìm thấy micro.", false);
+        showBanner("Máy không tìm thấy micro. Con dùng nút bàn phím ⌨️ để gõ nhé.");
+        toggleType(true);
+      }else{
+        setStatus("Bấm nút micro và nói với Ollie nhé!", false);
+      }
+    };
+    recog.onend = function(){
+      listening=false; micBtn.classList.remove("listening");
+      var said=(finalText+" "+interimText).trim();
+      if(said){ send(said); }
+      else if(!busy && !hadError){ setStatus("Ollie chưa nghe rõ. Bấm nút và nói lại nhé!", false); }
+    };
+  }else{
+    showBanner("Trình duyệt này chưa nghe được giọng nói. Con hãy dùng nút bàn phím ⌨️ để gõ, hoặc mở bằng Chrome/Edge trên máy tính nhé.");
+    toggleType(true);
+  }
+
+  async function ensureMic(){
+    if(micReady) return true;
+    if(!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)){ micReady=true; return true; }
+    setStatus("Đang xin phép dùng micro...", false);
+    try{
+      var st=await navigator.mediaDevices.getUserMedia({audio:true});
+      st.getTracks().forEach(function(t){ t.stop(); });
+      micReady=true; return true;
+    }catch(err){
+      var name=err&&err.name;
+      if(name==="NotAllowedError" || name==="SecurityError"){
+        showBanner("🎤 Micro đang bị chặn. Bấm biểu tượng ổ khóa 🔒 hoặc hình micro ở thanh địa chỉ, chọn \"Cho phép (Allow)\", rồi bấm nút nói lại. Hoặc dùng nút bàn phím ⌨️ để gõ.");
+      }else if(name==="NotFoundError" || name==="NotReadableError"){
+        showBanner("Máy không tìm thấy hoặc không mở được micro. Con dùng nút bàn phím ⌨️ để gõ nhé.");
+      }else{
+        showBanner("Chưa mở được micro. Con dùng nút bàn phím ⌨️ để gõ, hoặc mở bằng Chrome/Edge nhé.");
+      }
+      setStatus("Bấm nút bàn phím ⌨️ để gõ, hoặc thử micro lại.", false);
+      toggleType(true);
+      return false;
+    }
+  }
+
+  micBtn.addEventListener("click", async function(){
+    if(!recog){ toggleType(true); return; }
+    if(listening){ try{ recog.stop(); }catch(e){} return; }   // lần bấm thứ 2 -> gửi
+    if(busy) return;
+    var ok = await ensureMic();
+    if(!ok) return;
+    try{ window.speechSynthesis && window.speechSynthesis.cancel(); }catch(e){}
+    try{ recog.start(); }
+    catch(e){ try{ recog.stop(); }catch(_){} setStatus("Bấm nút micro một lần nữa nhé.", false); }
+  });
+
+  // ---- bật/tắt giọng đọc ----
+  soundBtn.addEventListener("click", function(){
+    soundOn = !soundOn;
+    soundBtn.classList.toggle("on", soundOn);
+    if(!soundOn){ try{ window.speechSynthesis.cancel(); }catch(e){} }
+    setStatus(soundOn ? "Đã bật giọng đọc của Ollie." : "Đã tắt giọng đọc.", false);
+  });
+
+  // ---- gõ chữ (dự phòng) ----
+  function toggleType(force){
+    var show = (typeof force==="boolean") ? force : !typebox.classList.contains("show");
+    typebox.classList.toggle("show", show);
+    keyBtn.classList.toggle("on", show);
+    if(show) typeInput.focus();
+  }
+  keyBtn.addEventListener("click", function(){ toggleType(); });
+  typebox.addEventListener("submit", function(ev){
+    ev.preventDefault();
+    var v = typeInput.value.trim();
+    if(!v) return;
+    typeInput.value = "";
+    send(v);
+  });
+
+  // ---- lời chào ----
+  (function welcome(){
+    var row = document.createElement("div");
+    row.className = "row ollie";
+    row.innerHTML = owlAv + '<div class="bubble"><div class="en">Hi there! I am Ollie the owl. Let\'s talk in English! Pick a topic, or press the big button and say hello.</div>'+
+      '<div class="vi">Xin chào! Mình là cú Ollie. Mình nói tiếng Anh nhé! Chọn một chủ đề, hoặc bấm nút lớn và nói "hello".</div>'+
+      '<div class="brow"><button class="mini play">'+spkIcon+'Nghe lại</button></div></div>';
+    chat.appendChild(row);
+    var p = row.querySelector(".play");
+    p.addEventListener("click", function(){ speak("Hi there! I am Ollie the owl. Let's talk in English! Pick a topic, or press the big button and say hello."); });
+  })();
+
+})();
+</script>
+</body>
+</html>
